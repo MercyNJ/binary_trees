@@ -63,6 +63,7 @@ heap_t *heap_insert(heap_t **root, int value);
 heap_t *array_to_heap(int *array, size_t size);
 int heap_extract(heap_t **root);
 int *heap_to_sorted_array(heap_t *heap, size_t *size);
-
+void enqueue_node(const binary_tree_t *node, const binary_tree_t **queue, int *rear);
+const binary_tree_t *dequeue_node(const binary_tree_t **queue, int *front);
 
 #endif /* _BINARY_TREES_H_ */
