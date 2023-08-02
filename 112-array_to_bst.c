@@ -10,20 +10,17 @@
  */
 bst_t *array_to_bst(int *array, size_t size)
 {
-  bst_t *root = NULL;
-  size_t i;
+	bst_t *root = NULL;
+	size_t i;
 
-  if (array == NULL)
-    return NULL;
-
-  for (i = 0; i < size; i++)
-    {
-      if (bst_insert(&root, array[i]) == NULL)
+	if (array == NULL)
+		return (NULL);
+	for (i = 0; i < size; i++)
 	{
-	  // Value already exists, ignore it and continue inserting other values
-	  continue;
+		if (bst_insert(&root, array[i]) == NULL)
+		{
+			continue;
+		}
 	}
-    }
-
-  return root;
+	return (root);
 }
