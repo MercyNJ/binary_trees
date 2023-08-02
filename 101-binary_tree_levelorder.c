@@ -1,4 +1,6 @@
 #include "binary_trees.h"
+#define QUEUE_SIZE 1024
+
 /**
  * enqueue_node - enqueues a nodes
  * @node: to be enqueued
@@ -34,7 +36,7 @@ void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
 	if (tree == NULL || func == NULL)
 		return;
-	const binary_tree_t **queue = malloc(sizeof(binary_tree_t *));
+	const binary_tree_t **queue = malloc(QUEUE_SIZE * sizeof(binary_tree_t *));
 
 	if (queue == NULL)
 		return;
