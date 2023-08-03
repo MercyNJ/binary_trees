@@ -21,7 +21,7 @@ bst_t *bst_minimum(bst_t *tree)
  * @root: Pointer to the root node of the tree where you will remove a node.
  * @value: The value to remove in the tree.
  *
- * Return: Pointer to the new root node of the tree after removing the desired value.
+ * Return: Pointer to new root node of tree after removal.
  */
 bst_t *bst_remove(bst_t *root, int value)
 {
@@ -36,22 +36,27 @@ bst_t *bst_remove(bst_t *root, int value)
 		if (root->left == NULL)
 		{
 			bst_t *temp = root->right;
+
 			if (temp)
 				temp->parent = root->parent;
 			free(root);
-			return temp;
+			return (temp);
 		}
 		else if (root->right == NULL)
 		{
 			bst_t *temp = root->left;
+
 			if (temp)
 				temp->parent = root->parent;
+
 			free(root);
-			return temp;
+			return (temp);
 		}
 		bst_t *in_order_successor = bst_minimum(root->right);
+
 		root->n = in_order_successor->n;
+
 		root->right = bst_remove(root->right, in_order_successor->n);
 	}
-	return root;
+	return (root);
 }
