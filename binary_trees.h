@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <limits.h>
-
+#include <stdbool.h>
 /**
  * struct binary_tree_s - Binary tree node
  *
