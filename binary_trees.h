@@ -24,6 +24,23 @@ typedef struct binary_tree_s bst_t;
 typedef struct binary_tree_s avl_t;
 typedef struct binary_tree_s heap_t;
 
+typedef struct queue_node {
+  binary_tree_t* node;
+  struct queue_node* next;
+} queue_node_t;
+
+typedef struct {
+  queue_node_t* front;
+  queue_node_t* rear;
+} queue_t;
+queue_node_t* create_queue_node(binary_tree_t* node);
+queue_t* create_queue();
+void enqueue(queue_t* queue, binary_tree_t* node);
+binary_tree_t* dequeue(queue_t* queue);
+int is_empty(queue_t* queue);
+void destroy_queue(queue_t* queue);
+
+
 void binary_tree_print(const binary_tree_t *);
 binary_tree_t *binary_tree_node(binary_tree_t *parent, int value);
 binary_tree_t *binary_tree_insert_left(binary_tree_t *parent, int value);
