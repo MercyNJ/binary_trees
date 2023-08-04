@@ -108,7 +108,7 @@ void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 
 	if (tree == NULL || func == NULL)
 		return;
-	queue = create_queue(void);
+	queue = create_queue();
 	if (queue == NULL)
 		return;
 	enqueue(queue, (binary_tree_t *)tree);
