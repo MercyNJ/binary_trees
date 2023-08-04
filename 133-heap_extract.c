@@ -1,75 +1,87 @@
-#include <stdlib.h>
-// Function to get the height of the heap
-int get_height(heap_t* root) {
-    if (root == NULL)
-        return 0;
-    int left_height = get_height(root->left);
-    int right_height = get_height(root->right);
-    return 1 + (left_height > right_height ? left_height : right_height);
+#include "binary_trees.h"
+
+int get_last_level_order_node(heap_t* root) {
+    int last_node_value = root->n;
+    int max_nodes = 1000;
+    heap_t** queue = (heap_t**)malloc(max_nodes * sizeof(heap_t*));
+    int front = 0, rear = 0;
+    queue[rear++] = root;
+
+    while (front < rear) {
+        heap_t* current = queue[front++];
+        last_node_value = current->n;
+        if (rear == max_nodes) {
+            max_nodes *= 2;
+            queue = (heap_t**)realloc(queue, max_nodes * sizeof(heap_t*));
+        }
+        if (current->left) queue[rear++] = current->left;
+        if (current->right) queue[rear++] = current->right;
+    }
+
+    free(queue);
+    return last_node_value;
 }
-// Function to swap values of two nodes
-void swap_values(heap_t* node1, heap_t* node2) {
-    int temp = node1->n;
-    node1->n = node2->n;
-    node2->n = temp;
-}
-// Function to rebuild the heap
+
 void heapify_down(heap_t* root) {
-    if (root == NULL)
-        return;
-    heap_t* max_node = root;
-    if (root->left != NULL && root->left->n > max_node->n)
-        max_node = root->left;
-    if (root->right != NULL && root->right->n > max_node->n)
-        max_node = root->right;
-    if (max_node != root) {
-        swap_values(root, max_node);
-        heapify_down(max_node);
+    heap_t* current = root;
+    while (1) {
+        heap_t* max_child = NULL;
+        if (current->left && current->left->n > current->n) {
+            max_child = current->left;
+        }
+        if (current->right && current->right->n > (max_child ? max_child->n : current->n)) {
+            max_child = current->right;
+        }
+
+        if (max_child && max_child->n > current->n) {
+            int temp = current->n;
+            current->n = max_child->n;
+            max_child->n = temp;
+            current = max_child;
+        } else {
+            break;
+        }
     }
 }
+
 int heap_extract(heap_t** root) {
-    if (root == NULL || *root == NULL)
-        return 0;
-    // Get the value of the root node
+    if (!*root) return 0;
+
     int extracted_value = (*root)->n;
-    // Get the height of the heap
-    int height = get_height(*root);
-    // Find the last level-order node
-    int i;
     heap_t* last_node = NULL;
-    for (i = 1; i < height - 1; i++) {
-        last_node = (last_node == NULL) ? *root : last_node->left;
-    }
-    // Traverse to the rightmost node in the last level
-    if (last_node == NULL) {
-        last_node = *root;
-        while (last_node->right != NULL) {
-            last_node = last_node->right;
-        }
-    } else if (last_node->right != NULL) {
-        last_node = last_node->right;
-        while (last_node->left != NULL) {
-            last_node = last_node->left;
-        }
-    }
-    // Replace the root with the last node
-    (*root)->n = last_node->n;
-    // Free the last node
-    if (last_node == *root) {
+
+    if (!(*root)->left && !(*root)->right) {
         free(*root);
         *root = NULL;
     } else {
-        heap_t* parent = last_node->parent;
-        if (parent == NULL)
-            parent = last_node;
-        if (parent->left == last_node)
-            parent->left = NULL;
-        else
-            parent->right = NULL;
-        free(last_node);
+        int last_node_value = get_last_level_order_node(*root);
+        int max_nodes = 1000;
+        heap_t** queue = (heap_t**)malloc(max_nodes * sizeof(heap_t*));
+        int front = 0, rear = 0;
+        queue[rear++] = *root;
+
+        while (front < rear) {
+            heap_t* current = queue[front++];
+            if (current->n == last_node_value) {
+                last_node = current;
+            }
+            if (rear == max_nodes) {
+                max_nodes *= 2;
+                queue = (heap_t**)realloc(queue, max_nodes * sizeof(heap_t*));
+            }
+            if (current->left) queue[rear++] = current->left;
+            if (current->right) queue[rear++] = current->right;
+        }
+
+        free(queue);
+
+        if (last_node) {
+            (*root)->n = last_node->n;
+            free(last_node);
+            last_node = NULL;
+            heapify_down(*root);
+        }
     }
-    // Rebuild the heap if necessary
-    if (*root != NULL)
-        heapify_down(*root);
+
     return extracted_value;
 }
