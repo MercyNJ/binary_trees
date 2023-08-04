@@ -1,6 +1,5 @@
 #include "binary_trees.h"
 #define QUEUE_SIZE 1024
-
 /**
  * binary_tree_is_complete - Checks if a binary tree is complete.
  * @tree: A pointer to the root node of the tree to check.
@@ -9,13 +8,13 @@
  */
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
+	int flag = 0;
+	int front = 0, rear = 0;
+	const binary_tree_t **queue;
+
 	if (tree == NULL)
 		return (0);
-
-	int flag = 0;
-	const binary_tree_t **queue = malloc(sizeof(const binary_tree_t *));
-	int front = 0, rear = 0;
-
+	queue = malloc(sizeof(const binary_tree_t *));
 	queue[rear++] = tree;
 	while (front < rear)
 	{
