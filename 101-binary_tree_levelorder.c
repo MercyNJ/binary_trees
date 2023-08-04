@@ -75,31 +75,11 @@ binary_tree_t *dequeue(queue_t *queue)
 	return (node);
 }
 /**
- * is_empty - check if queue is NULL
- * Return: 1 
- */
-int is_empty(queue_t *queue)
-{
-	return (queue == NULL || queue->front == NULL);
-}
-/**
- * destroy_queue - destroys the queue
- * @queue: to destroyed
+ * binary_tree_levelorder - traverses using level-order.
+ * @tree: pointer to root.
+ * @func: pointer to function that print data.
  *
- * Return: nothing
- */
-void destroy_queue(queue_t *queue)
-{
-	while (!is_empty(queue))
-		dequeue(queue);
-	free(queue);
-}
-/**
- * binary_tree_levelorder - traverses using level-order
- * @tree: pointer to root
- * @func: pointer to function that print data
- *
- * Return: nothing
+ * Return: nothing.
  */
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
@@ -109,10 +89,12 @@ void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 	if (tree == NULL || func == NULL)
 		return;
 	queue = create_queue();
+
 	if (queue == NULL)
 		return;
 	enqueue(queue, (binary_tree_t *)tree);
-	while (!is_empty(queue))
+
+	while (queue != NULL && queue->front != NULL)
 	{
 		current = dequeue(queue);
 		func(current->n);
@@ -121,5 +103,7 @@ void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 		if (current->right != NULL)
 			enqueue(queue, current->right);
 	}
-	destroy_queue(queue);
+	while (queue != NULL && queue->front != NULL)
+		dequeue(queue);
+	free(queue);
 }
