@@ -23,14 +23,18 @@ int binary_tree_is_bst(const binary_tree_t *tree)
 int is_bst_helper(const binary_tree_t *tree,
 		const binary_tree_t *min, const binary_tree_t *max)
 {
+	int left_bst;
+	int right_bst;
+	int current_value;
+	int min_value, max_value;
+
 	if (tree == NULL)
 		return (1);
-	int left_bst = is_bst_helper(tree->left, min, tree);
-	int right_bst = is_bst_helper(tree->right, tree, max);
-	int current_value = tree->n;
-	int min_value = (min != NULL) ? min->n : INT_MIN;
-	int max_value = (max != NULL) ? max->n : INT_MAX;
-
+	left_bst = is_bst_helper(tree->left, min, tree);
+	right_bst = is_bst_helper(tree->right, tree, max);
+	current_value = tree->n;
+	min_value = (min != NULL) ? min->n : INT_MIN;
+	max_value = (max != NULL) ? max->n : INT_MAX;
 	if (current_value <= min_value || current_value >= max_value)
 		return (0);
 	return (left_bst && right_bst);
