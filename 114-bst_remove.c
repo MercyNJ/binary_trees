@@ -25,6 +25,8 @@ bst_t *bst_minimum(bst_t *tree)
  */
 bst_t *bst_remove(bst_t *root, int value)
 {
+	bst_t *in_order_successor;
+
 	if (root == NULL)
 		return (NULL);
 	if (value < root->n)
@@ -52,10 +54,8 @@ bst_t *bst_remove(bst_t *root, int value)
 			free(root);
 			return (temp);
 		}
-		bst_t *in_order_successor = bst_minimum(root->right);
-
+		in_order_successor = bst_minimum(root->right);
 		root->n = in_order_successor->n;
-
 		root->right = bst_remove(root->right, in_order_successor->n);
 	}
 	return (root);
